@@ -17,6 +17,8 @@
 
 /* navbar color */
 
+
+
 :root {
   --blue: #5e72e4;
   --indigo: #5603ad;
@@ -54,10 +56,71 @@
   --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
+
+/*Loading spinner*/ 
+
+.lds-dual-ring {
+  display: inline-block;
+  width: 64px;
+  height: 64px;
+}
+.lds-dual-ring:after {
+  content: " ";
+  display: block;
+  width: 46px;
+  height: 46px;
+  margin: 1px;
+  border-radius: 50%;
+  border: 5px solid #fff;
+  border-color: #fff transparent #fff transparent;
+  animation: lds-dual-ring 1.2s linear infinite;
+}
+@keyframes lds-dual-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+
+/*End of loading spinner*/
+
 *,
 *::before,
 *::after {
   box-sizing: border-box;
+}
+
+.titleBox{
+  display: flex;
+  flex-direction: row;
+  height: 300px; 
+  padding-top: 50px;
+  padding-bottom :50px;
+  padding-right: 100px;
+  padding-left: 100px;
+  background-color: blue;
+}
+
+.button-size-restriction{
+  height: 75px;
+  width: 200px;
+}
+
+.title{
+  font-size:50px;
+}
+
+.center-item{
+  margin: auto;
+}
+
+.interactive-content{
+  display: flex;
+  flex-direction: row;
+  height: 100%;
 }
 
 html {
@@ -15341,7 +15404,7 @@ table.tablesorter thead tr .headerSortDown {
 }
 
 .main-panel>.content {
-  padding: 78px 30px 30px 280px;
+  padding: 78px 30px 30px 78px;
   min-height: calc(100vh - 70px);
 }
 
