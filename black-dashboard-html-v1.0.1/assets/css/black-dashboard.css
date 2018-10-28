@@ -56,7 +56,26 @@
   --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
+/* manual login button class */
+.banner-button {
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 30px;
+}
 
+/* manual center of dropdown menu */
+.center-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* manual center of loading */
+.center-absolut {
+  position :absolute;
+  left:50%;
+  top: 50%;
+  transform: translateX(-50%) translateY(-50%);
+}
 /*Loading spinner*/ 
 
 .lds-dual-ring {
@@ -69,6 +88,7 @@
 .lds-dual-ring-holder {
     z-index: 50;
     display: none;
+    align-content: center;
     position:fixed;
     padding:0;
     margin:0;
@@ -15424,7 +15444,7 @@ table.tablesorter thead tr .headerSortDown {
 }
 
 .main-panel>.content {
-  padding: 78px 30px 30px 280px;
+  padding: 78px;
   min-height: calc(100vh - 70px);
 }
 

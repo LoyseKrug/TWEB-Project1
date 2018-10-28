@@ -93,7 +93,7 @@ function sendCodeToServer(code) {
           .then(data => {
             let stringToken = data.access_token;
             document.cookie = `access_token=${stringToken}`;
-            this.token = readCookie('access_token');
+            token = readCookie('access_token');
 
             // start loading
             startLoading();
@@ -138,7 +138,9 @@ function handleRepoList() {
 
   // si on est pas login on return
   if((token === undefined || token === null)){
+    console.log("Token is null");
     showNotification('You must login first !', 1)
+    
     return;
   }
 
@@ -192,6 +194,9 @@ function updateUserReposList(repos){
 
   // listen to change event
   select.addEventListener("change", handleChangeRepoSelected);
+
+  handleChangeRepoSelected();
+
   endLoading();
   displayRepos();
 }
@@ -199,6 +204,7 @@ function updateUserReposList(repos){
 // hangle che event of changing selected repo
 function handleChangeRepoSelected(){
 
+  startLoading();
   // get the selected repository
   let select = document.getElementById('UserReposList');
   let selectedRepo = select.options[select.selectedIndex].value;
@@ -246,6 +252,8 @@ function handleChangeRepoSelected(){
         filteredData.map(coll => coll.contributions), 
         'bar');
       //console.log('update done');
+
+      endLoading();
     })})
     .catch(err => {
       showNotification('Oups, an error occured. Sorry, this app sucks...', 4);
@@ -351,7 +359,6 @@ function updateChart(chartId,labels, data, chartType){
       document.getElementById("repository-choice").style.display = "none"; 
       document.getElementById("clash-of-issues-chart").style.display = "none"; 
       document.getElementById("clash-of-commit-chart").style.display = "none"; 
-      document.getElementById("clash-of-lines-chart").style.display = "none"; 
 
       //show the following elements
       document.getElementById("login").style.display = "block"; 
@@ -363,7 +370,7 @@ function updateChart(chartId,labels, data, chartType){
    */
   function startLoading()  {
       //show the following elements
-      document.getElementById("login-loading").style.display = "block";
+      document.getElementById("login-loading").style.display = "flex";
   };
 
   function endLoading(){
@@ -374,8 +381,7 @@ function updateChart(chartId,labels, data, chartType){
       //show the following elements 
       document.getElementById("repository-choice").style.display = "block"; 
       document.getElementById("clash-of-issues-chart").style.display = "block"; 
-      document.getElementById("clash-of-commit-chart").style.display = "block"; 
-      document.getElementById("clash-of-lines-chart").style.display = "block";
+      document.getElementById("clash-of-commit-chart").style.display = "block";
   }; 
 /*
 function getUser(username) {
