@@ -57,7 +57,7 @@
       <div class="content">
 
         
-        <div class="row">
+        <div id="title" class="row">
           <div class="col-12">
             <div class="card card-chart">
               <div class="card-header ">
@@ -70,18 +70,39 @@
             </div>
           </div>
 
-          
+<!--
+          <div class="row">
             <div class="col-12">
+              <div class="card card-chart">
+                <div class="card-header ">
+                  <div class="row">
+                    <div class="col-12 text-center">
+                        <button class="btn btn-primary btn-block" onclick="pageController.displayLogin()">displayLogin</button>
+                        <button class="btn btn-primary btn-block" onclick="pageController.displayLoginLoading()">displayLoginLoading</button>
+                        <button class="btn btn-primary btn-block" onclick="pageController.displayRepos()">displayRepos</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          -->
+          
+            <!-- login button -->
+            <div id="login" class="col-12">
                   <div class="row">
                     <div class="col-5"></div>
-                    <div class="col-2">
+                    <div id="login-button" class="col-2">
                             <button id="buttonLogin" class="btn btn-primary btn-block"></button>        
+                    </div>
+                    <div id="login-loading" class="col-2">
+                      <div class="lds-dual-ring"></div>       
                     </div>
                     <div class="col-5"></div>
                   </div>
             </div>
 
-          <div class="col-12">
+          <!--card presenting the accessible repos--> 
+          <div id="repository-choice" class="col-12">
               <div class="card card-chart">
                 <div class="card-header ">
                   <div class="row">
@@ -99,7 +120,7 @@
             </div>
 
             <!-- Clash Of Issues-->
-            <div class="col-12">
+            <div id="clash-of-issues-chart" class="col-12">
                 <div class="card card-chart">
                   <div class="card-header ">
                     <div class="row">
@@ -118,7 +139,7 @@
               </div>
 
               <!-- Clash Of Commits-->
-            <div class="col-12">
+            <div id="clash-of-commit-chart" class="col-12">
                 <div class="card card-chart">
                   <div class="card-header ">
                     <div class="row">
@@ -137,7 +158,7 @@
               </div>
 
               <!-- Clash Of Lines-->
-            <div class="col-12">
+            <div id="clash-of-lines-chart" class="col-12">
                 <div class="card card-chart">
                   <div class="card-header ">
                     <div class="row">
@@ -325,7 +346,10 @@
     });
   </script>
   
+  <!-- our scripts -->
   <script src="./js/app.js"></script>
+  <script src="./js/page-controller.js"></script>
+
   <script>
     $(document).ready(function() {
       // Javascript method's body can be found in assets/js/demos.js

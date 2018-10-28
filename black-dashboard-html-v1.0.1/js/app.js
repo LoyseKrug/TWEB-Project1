@@ -1,3 +1,5 @@
+
+
 // https://medium.freecodecamp.org/environment-settings-in-javascript-apps-c5f9744282b6
 const baseUrl = window.location.hostname === 'localhost'
   ? 'http://localhost:8080'
@@ -12,22 +14,27 @@ window.onload = onPageLoaded();
 
 function onPageLoaded(){
   console.log("app.js: Loading page");
-
+  
   let buttonLogin = document.getElementById("buttonLogin");
 
   // take care of the login/logout button
   if(token === null){
+    hideRepo();
     buttonLogin.removeEventListener("click", logout);
     buttonLogin.addEventListener("click", login);
     buttonLogin.textContent = "Login"; 
+    
+    // send the code of this is a redirection
+    sendCodeToServer(getGitHubCodeFromURL());
+
   } else {
     buttonLogin.removeEventListener("click", login);
     buttonLogin.addEventListener("click", logout);
     buttonLogin.textContent = "Logout"; 
+
+    handleRepoList();
   }
   
-  // send the code of this is a redirection
-  sendCodeToServer(getGitHubCodeFromURL());
 
   console.log("app.js: Page loaded");
 }
@@ -37,6 +44,7 @@ function login(){
 }
 
 function logout(){
+  hideRepo();
   deleteAllCookies();
   location.href="../index.html";
 }
@@ -75,11 +83,12 @@ function sendCodeToServer(code) {
             this.token = readCookie('access_token');
 
             // start loading
-
+            startLoading();
             // maj de la liste des repos
             handleRepoList();
 
             // end loading
+            displayRepos();
           }));
     }
   }
@@ -123,7 +132,7 @@ function handleRepoList() {
 
     })
     .catch(err => {
-      updatePlaceholder('Oups, an error occured. Sorry, this app sucks...', 'text-error');
+      updatePlaceholder('Oups, an error occured. Sorry, this app sucks...');
       console.error('Cannot fetch data', err)
     })
 }
@@ -174,7 +183,9 @@ function updateUserReposList(repos){
   });
 
   // listen to change event
-  select.addEventListener("change", handleChangeRepoSelected)
+  select.addEventListener("change", handleChangeRepoSelected);
+  endLoading();
+  displayRepos();
 }
 
 // hangle che event of changing selected repo
@@ -317,6 +328,43 @@ function updateChart(chartId,labels, data, chartType){
   }
   */
 }
+
+/*Page controls*/
+/**
+     * This function is called at the beginning or when the logout button is pressed
+     */
+    function hideRepo () {
+      //hide the following elements 
+      document.getElementById("login-loading").style.display = "none";
+      document.getElementById("repository-choice").style.display = "none"; 
+      document.getElementById("clash-of-issues-chart").style.display = "none"; 
+      document.getElementById("clash-of-commit-chart").style.display = "none"; 
+      document.getElementById("clash-of-lines-chart").style.display = "none"; 
+
+      //show the following elements
+      document.getElementById("login").style.display = "block"; 
+      document.getElementById("login-button").style.display = "block";   
+  };
+
+  /**
+   * That function is called when the user press the login button, during the process of login with gituhub
+   */
+  function stardLoadingLoading()  {
+      //show the following elements
+      document.getElementById("login-loading").style.display = "block";
+  };
+
+  function endLoading(){
+      document.getElementById("login-loading").style.display = "none";
+  }
+
+  function displayRepos(){
+      //show the following elements 
+      document.getElementById("repository-choice").style.display = "block"; 
+      document.getElementById("clash-of-issues-chart").style.display = "block"; 
+      document.getElementById("clash-of-commit-chart").style.display = "block"; 
+      document.getElementById("clash-of-lines-chart").style.display = "block";
+  }; 
 
 handleRepoList();
 
