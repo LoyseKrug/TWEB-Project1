@@ -61,26 +61,8 @@ app.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
   res.send(err.message);
 });
 
-// run the server 
+// run the server
 app.listen(port, () => {
   // eslint-disable-next-line no-console
   console.log(`Server listening at http://localhost:${port}`);
 });
-
-/*
-function fetchAllPages(api, allPagesAreAvailable) {
-  const responses = [];
-  function fetchAndProcessPage(pageNumber) {
-    api.getPage(pageNumber, (response) => {
-      responses.push(response);
-      if (response.header.hasNext) {
-        fetchAndProcessPage(pageNumber + 1);
-      } else {
-        allPagesAreAvailable(responses);
-      }
-    });
-  }
-
-  fetchAndProcessPage(1);
-}
-*/
