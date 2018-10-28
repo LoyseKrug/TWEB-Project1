@@ -87,12 +87,14 @@ function sendCodeToServer(code) {
             document.cookie = `access_token=${stringToken}`;
             this.token = readCookie('access_token');
 
+            console.log(`token = ${stringToken} && cookie = ${this.token}`)
             // start loading
             startLoading();
             
             console.log("app.js: We got answer from server");
             // maj de la liste des repos
             handleRepoList();
+            console.log("app.js: We got answer from server");
 
             // end loading
             displayRepos();
@@ -129,7 +131,8 @@ function handleRepoList() {
 
   // si on est pas login on return
   if((token === undefined || token === null)){
-    updatePlaceholder('You must login first !')
+    console.log("no token found in handeling repo list");
+    updatePlaceholder('You must login first !');
     return;
   }
 
