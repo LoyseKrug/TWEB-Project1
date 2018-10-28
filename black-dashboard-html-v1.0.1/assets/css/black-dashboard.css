@@ -88,7 +88,7 @@
   display: block;
   width: 230px;
   height: 230px;
-  margin:auto;
+  margin:1;
   border-radius: 50%;
   border: 5px solid #fff;
   border-color: #fff transparent #fff transparent;
@@ -107,10 +107,8 @@
 
 /*End of loading spinner*/
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
+.hidden{
+  display:none;
 }
 
 .titleBox{
