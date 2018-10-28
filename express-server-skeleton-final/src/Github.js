@@ -1,7 +1,7 @@
 const fetch = require('node-fetch');
 
-const client_id = process.env.client_id;
-const client_secret = process.env.secret;
+const clientId = process.env.client_id;
+const clientSecret = process.env.secret;
 
 class ResponseError extends Error {
   constructor(res, body) {
@@ -32,8 +32,8 @@ class Github {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        client_id,
-        client_secret,
+        client_id: clientId,
+        client_secret: clientSecret,
         code: clientCode,
       }),
     };
@@ -83,28 +83,6 @@ class Github {
   repoCollaborators(fullName, token) {
     return this.request(`/repos/${fullName}/contributors`, token);
   }
-
-  /*
-  user(username) {
-    return this.request(`/users/${username}`);
-  }
-
-  userRepos(username) {
-    return this.request(`/users/${username}/repos`);
-  }
-
-  repoLanguages(repoName) {
-    return this.request(`/repos/${repoName}/languages`);
-  }
-
-  userLanguages(username) {
-    return this.repos(username)
-      .then((repos) => {
-        const getLanguages = repo => this.repoLanguages(repo.full_name);
-        return Promise.all(repos.map(getLanguages));
-      });
-  }
-  */
 }
 
 module.exports = Github;
