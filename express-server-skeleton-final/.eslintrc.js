@@ -3,6 +3,6 @@ module.exports = {
     "rules": {
         "arrow-body-style": "off",
         "arrow-parens": "off",
-        "no-console": ["error", { "allow": ["warn", "error"] }],
+        "no-console": "off", //["error", { "allow": ["warn", "error"] }],
     },
 };
