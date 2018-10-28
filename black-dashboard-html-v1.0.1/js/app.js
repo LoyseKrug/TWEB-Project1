@@ -19,6 +19,8 @@ function onPageLoaded(){
 
   // take care of the login/logout button
   if(token === null){
+    
+    console.log("app.js: token is null on load");
     hideRepo();
     buttonLogin.removeEventListener("click", logout);
     buttonLogin.addEventListener("click", login);
@@ -32,6 +34,7 @@ function onPageLoaded(){
     buttonLogin.addEventListener("click", logout);
     buttonLogin.textContent = "Logout"; 
 
+    console.log("app.js: Token is not null on load");
     handleRepoList();
   }
   
@@ -74,6 +77,8 @@ function readCookie(name) {
 function sendCodeToServer(code) {
   if ((token === undefined || token === null)) {
     if (code !== undefined && code !== null) {
+      
+    console.log("app.js: Sending code to server");
 
       fetch(`http://localhost:3000/githubredirect?code=${code}`)
         .then(data => data.json()
@@ -84,6 +89,8 @@ function sendCodeToServer(code) {
 
             // start loading
             startLoading();
+            
+            console.log("app.js: We got answer from server");
             // maj de la liste des repos
             handleRepoList();
 
@@ -118,6 +125,7 @@ function getCollaborators(fullname) {
 }
 
 function handleRepoList() {
+  console.log("app.js: Handeling repo list");
 
   // si on est pas login on return
   if((token === undefined || token === null)){
@@ -349,7 +357,7 @@ function updateChart(chartId,labels, data, chartType){
   /**
    * That function is called when the user press the login button, during the process of login with gituhub
    */
-  function stardLoadingLoading()  {
+  function startLoading()  {
       //show the following elements
       document.getElementById("login-loading").style.display = "block";
   };
@@ -365,9 +373,6 @@ function updateChart(chartId,labels, data, chartType){
       document.getElementById("clash-of-commit-chart").style.display = "block"; 
       document.getElementById("clash-of-lines-chart").style.display = "block";
   }; 
-
-handleRepoList();
-
 /*
 function getUser(username) {
   return fetch(`${baseUrl}/users/${username}`)
