@@ -81,6 +81,14 @@ function sendCodeToServer(code) {
     console.log("app.js: Sending code to server");
 
       fetch(`http://localhost:3000/githubredirect?code=${code}`)
+        .then(data => {
+          if(data.ok){
+            return data;
+          } else {
+            console.log('Can\'t reach server');
+            showNotification('Can\'t reach server', 4);
+          }
+        })
         .then(data => data.json()
           .then(data => {
             let stringToken = data.access_token;
@@ -93,10 +101,11 @@ function sendCodeToServer(code) {
             console.log("app.js: We got answer from server");
             // maj de la liste des repos
             handleRepoList();
-
-            // end loading
-            displayRepos();
-          }));
+          }))
+          .catch(err => {
+            showNotification('Oups, an error occured. Sorry, this app sucks...', 4);
+            console.error('Cannot fetch data', err)
+          });
     }
   }
 }
@@ -129,33 +138,24 @@ function handleRepoList() {
 
   // si on est pas login on return
   if((token === undefined || token === null)){
-    updatePlaceholder('You must login first !')
+    showNotification('You must login first !', 1)
     return;
   }
 
-  return getRepos().then(repos => {
+  return getRepos()
+    .then(repos => {
       console.log(`We got the user's repos : ${JSON.stringify(repos)}`);
 
       updateUserReposList(repos);
 
     })
     .catch(err => {
-      updatePlaceholder('Oups, an error occured. Sorry, this app sucks...');
+      showNotification('Oups, an error occured. Sorry, this app sucks...', 4);
       console.error('Cannot fetch data', err)
     })
 }
 
-function updatePlaceholder(content, className = 'text-secondary') {
-
-  /*
-  const placeholder = document.getElementById('placeholder');
-  placeholder.className = className;
-  placeholder.innerHTML = content;
-*/
-  showNotification(content, 'top', 'center', 1);
-}
-
-function showNotification(message, from, align, colorNo) {
+function showNotification(message, colorNo) {
 
   $.notify({
     icon: "tim-icons icon-bell-55",
@@ -165,8 +165,8 @@ function showNotification(message, from, align, colorNo) {
     type: type[colorNo],
     timer: 8000,
     placement: {
-      from: from,
-      align: align
+      from: 'top',
+      align: 'center'
     }
   });
 }
@@ -246,7 +246,11 @@ function handleChangeRepoSelected(){
         filteredData.map(coll => coll.contributions), 
         'bar');
       //console.log('update done');
-    })});
+    })})
+    .catch(err => {
+      showNotification('Oups, an error occured. Sorry, this app sucks...', 4);
+      console.error('Cannot fetch data', err)
+    });
 }
 
 // Charts stuff 
