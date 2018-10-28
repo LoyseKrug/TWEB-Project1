@@ -9,7 +9,11 @@ const searchForm = document.getElementById('search-form');
 let chart = null;
 let token = readCookie('access_token');
 
-window.onload = sendCodeToServer(getGitHubCodeFromURL());
+window.onload = onPageLoaded();
+
+function onPageLoaded(){
+  sendCodeToServer(getGitHubCodeFromURL());
+}
 
 function readCookie(name) {
   var nameEQ = name + "=";
@@ -25,26 +29,26 @@ function readCookie(name) {
 function sendCodeToServer(code) {
   if ((token === undefined || token === null)) {
     if (code !== undefined && code !== null) {
-      console.log("Access Code is : " + code);
+
       fetch(`http://localhost:3000/githubredirect?code=${code}`)
         .then(data => data.json()
           .then(data => {
             let stringToken = data.access_token;
             document.cookie = `access_token=${stringToken}`;
             this.token = readCookie('access_token');
-            console.log(`Recieved from server : ` + this.token);
+
+            // start loading
 
             // maj de la liste des repos
             handleRepoList();
+
+            // end loading
           }));
-    } else {
-      console.log("No code in url");
     }
-  } else {
-    console.log(`Token found in cookie : ${token}`);
   }
 }
 
+// extracts the Githubcode parameter from url
 function getGitHubCodeFromURL() {
   let url_string = window.location.href;
   let url = new URL(url_string);
@@ -75,8 +79,6 @@ function handleRepoList() {
     return;
   }
 
-  updatePlaceholder('Loading...');
-
   return getRepos().then(repos => {
       updatePlaceholder('');
       console.log(`We got the user's repos : ${JSON.stringify(repos)}`);
@@ -98,10 +100,12 @@ function updatePlaceholder(content, className = 'text-secondary') {
 
 function updateUserReposList(repos){
   //create selection field
+  let parent = document.getElementById('UserReposListHolder');
   let select = document.createElement("SELECT");
   select.setAttribute("id", "UserReposList");
-  document.body.appendChild(select);
+  parent.appendChild(select);
 
+  // create a selectionnable list of user owned repos
   repos.forEach(repo => {
     console.log(`Repo : ${repo.name}`);
     let option = document.createElement("option");
@@ -113,19 +117,23 @@ function updateUserReposList(repos){
     document.getElementById("UserReposList").appendChild(option);
   });
 
+  // listen to change event
   select.addEventListener("change", handleChangeRepoSelected)
 }
 
+// hangle che event of changing selected repo
 function handleChangeRepoSelected(){
-  // extraire le repo sélectionné
+
+  // get the selected repository
   let select = document.getElementById('UserReposList');
   let selectedRepo = select.options[select.selectedIndex].value;
   let filteredData = null;
 
-  console.log(`new selected value: ${selectedRepo}`);
+  // pass it to the server to get the collaborators working on it
   getCollaborators(selectedRepo)
     .then(data => {
-      console.log(JSON.stringify(data));
+
+      // filter the needed data
       filteredData = data.map(collaborator => {
 
         let filteredCollaborator = {};//new Object();
@@ -134,14 +142,14 @@ function handleChangeRepoSelected(){
         filteredCollaborator.issueClosed = 0;
         return filteredCollaborator;
       });
-      console.log(filteredData);
-
-      // update graph with new data !
-      console.log('Chart updated !');
     })
     .then(a => {
+
+      // once we have the collaborators, we can track their solved issues
       getIssues(selectedRepo)
         .then(data => {
+
+          // foreach issus we increment the assignee's issueClosed counter
           data.forEach(issue => {
             for(let i = 0; i < filteredData.length; ++i){
               if(issue.assignee.login === filteredData[i].login){
@@ -150,13 +158,16 @@ function handleChangeRepoSelected(){
             }
           })
     })
-  .then(data => {
-    updateChart(filteredData, 'bar');
-  })});
+    .then(data => {
+      //console.log(`Chart gonna be updates with data : ${JSON.stringify(filteredData)}`);
+      // once all the data is packed we update the charts;
+      updateChart(filteredData, 'bar');
+      //console.log('update done');
+    })});
 }
 
 function updateChart(collaborators, chartType){
-  const chartContributors = document.getElementById('chart-languages');
+  const chartContributors = document.getElementById('chart-issues');
   const ctx = chartContributors.getContext('2d');
 
   const options = {
